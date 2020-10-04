@@ -8,12 +8,10 @@ PORT = 65432        # The port used by the server
 with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as s:
 	try:
 		s.connect((HOST, PORT))
-		s.sendall(b'Hello, world') #sends the message
-		data = s.recv(1024) #recieves server message
-		print('Received', repr(data))
-	
+		filename = input(str("Please enter the filename to send:"))
+		file = open(filename,'rb')
+		data = file.read(1024)
+		s.send(data)
+		file.close()
 	except ConnectionRefusedError:
 		print("Could not connect to server!")
-
-	
-
