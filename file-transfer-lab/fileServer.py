@@ -12,11 +12,11 @@ with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as s:
 	with conn:
 		while True:
 			print('Connected by', addr)
-			filename = input(str("Please enter a file name for the incoming file"))
-			file = open(filename, 'wb')
 			data = conn.recv(1024)
 			if not data:
 				break
+			filename = input(str("Please enter a file name for the incoming file"))
+			file = open(filename, 'wb')
 			file.write(data)
 			file.close()
 			print("File recieved and saved!")
