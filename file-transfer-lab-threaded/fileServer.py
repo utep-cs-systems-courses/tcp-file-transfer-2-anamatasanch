@@ -84,7 +84,7 @@ with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as s:
 					print(e)
 					sys.exit(0)
 
-while True:
-    sockAddr = lsock.accept()
-    server = Server(sockAddr)
-    server.start()
+	while True:
+		sockAddr = s.accept()
+		server = Server(sockAddr)
+		server.start()
