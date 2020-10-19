@@ -11,26 +11,43 @@ switchesVarDefaults = (
 	(('-?', '--usage'), "usage", False), # boolean (set if present)
 	)
 
-HOST = '127.0.0.1'  # The server's hostname or IP address
-PORT = 65432        # The port used by the server
-
 def getFile():
 	invalid = True
 	while invalid:
 		try:
 			filename = input(str("Please enter the filename to send:"))
 			file = open(filename,'rb')
+			return file, filename
 			invalid = False
 		except FileNotFoundError:
 			print("I couldn't find your file! Please keep trying.")
 
+paramMap = params.parseParams(switchesVarDefaults)
+server, usage, debug  = paramMap["server"], paramMap["usage"], paramMap["debug"]
+
+try:
+    HOST, PORT = re.split(":", server)
+    serverPort = int(serverPort)
+except:
+    print("Can't parse server:port from '%s'" % server)
+    sys.exit(1)
+
+if usage:
+    params.usage()
+
 with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as s:
+	if s is None:
+		print('could not open socket')
+		sys.exit(1)
+	
 	try:
 		s.connect((HOST, PORT))
-		file = getFile();
-		
-		data = file.read(1024)
-		s.send(data)
+		file, filename = getFile();
+		data = file.read()
+		if len(fileContents) == 0:
+			print("Empty file.")
+			sys.exit(1)
+		framedSend(s, fileName, data, debug)
 		file.close()
 	except ConnectionRefusedError:
 		print("Could not connect to server!")
