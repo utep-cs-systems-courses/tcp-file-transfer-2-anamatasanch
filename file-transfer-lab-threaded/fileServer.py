@@ -83,7 +83,7 @@ with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as s:
 						sys.exit(0)
 					else:
 						print("File is already on the server")
-						sys.exit(0)
+						sys.exit(1)
 				except FileNotFoundError as e:
 					print("File was not found")
 					print(e)
