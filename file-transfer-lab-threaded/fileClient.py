@@ -3,7 +3,7 @@
 import sys
 sys.path.append("../lib")
 import socket, params, os, re
-from EncapFramedSock import EncapFramedSock
+from encapFramedSock import EncapFramedSock
 
 switchesVarDefaults = (
 	(('-s', '--server'), 'server', "127.0.0.1:50001"),
@@ -45,14 +45,14 @@ with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as s:
 	
 	try:
 		s.connect((HOST, PORT))
-		encapSock = EncapFramedSock((s, addrPort))
+		encapSock = EncapFramedSock((s, (HOST, PORT)))
 		file, filename = getFile();
 		data = file.read()
 		if len(data) == 0:
 			print("Empty file.")
 			sys.exit(1)
-		print("sending fileName")
-		framedSend(s, filename, data, debug)
+		print("sending file")
+		encapSock.send(filename, data, debug)
 		file.close()
 	except ConnectionRefusedError:
 		print("Could not connect to server!")
