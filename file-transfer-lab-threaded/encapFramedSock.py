@@ -6,7 +6,7 @@ class EncapFramedSock:               # a facade
     self.rbuf = b""         # receive buffer
   def close(self):
     return self.sock.close()
-  def send(self, payload, filename, debugPrint=0):
+  def send(self, file_name, payload, debugPrint=0):
     if debugPrint: print("framedSend: sending %d byte message" % len(payload))
     msg = str(len(payload)).encode() + b':' + file_name.encode() + b':' + payload
     while len(msg):
