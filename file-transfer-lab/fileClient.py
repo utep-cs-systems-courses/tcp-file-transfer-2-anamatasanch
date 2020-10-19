@@ -2,7 +2,7 @@
 
 import sys
 sys.path.append("../lib")
-import socket, params, os, sys, re
+import socket, params, os, re
 from framedSock import framedSend, framedReceive
 
 switchesVarDefaults = (
