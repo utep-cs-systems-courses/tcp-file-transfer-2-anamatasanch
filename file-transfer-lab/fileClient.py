@@ -6,7 +6,7 @@ import socket, params, os, sys, re
 from framedSock import framedSend, framedReceive
 
 switchesVarDefaults = (
-	(('-l', '--listenPort') ,'listenPort', 50001),
+	(('-s', '--server'), 'server', "127.0.0.1:50001"),
 	(('-d', '--debug'), "debug", False), # boolean (set if present)
 	(('-?', '--usage'), "usage", False), # boolean (set if present)
 	)
@@ -21,20 +21,23 @@ def getFile():
 			invalid = False
 		except FileNotFoundError:
 			print("I couldn't find your file! Please keep trying.")
+	
 
 paramMap = params.parseParams(switchesVarDefaults)
 server, usage, debug  = paramMap["server"], paramMap["usage"], paramMap["debug"]
 
-try:
-    HOST, PORT = re.split(":", server)
-    serverPort = int(serverPort)
-except:
-    print("Can't parse server:port from '%s'" % server)
-    sys.exit(1)
-
 if usage:
-    params.usage()
+	params.usage()
 
+try:
+	print(server)
+	HOST, PORT = re.split(":", server)
+	PORT = int(PORT)
+except:
+	print("Can't parse server:port from '%s'" % server)
+	sys.exit(1)
+
+	
 with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as s:
 	if s is None:
 		print('could not open socket')
@@ -44,10 +47,11 @@ with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as s:
 		s.connect((HOST, PORT))
 		file, filename = getFile();
 		data = file.read()
-		if len(fileContents) == 0:
+		if len(data) == 0:
 			print("Empty file.")
 			sys.exit(1)
-		framedSend(s, fileName, data, debug)
+		print("sending fileName")
+		framedSend(s, filename, data, debug)
 		file.close()
 	except ConnectionRefusedError:
 		print("Could not connect to server!")
