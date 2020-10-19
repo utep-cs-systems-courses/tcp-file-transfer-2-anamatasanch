@@ -1,9 +1,9 @@
-  
 #! /usr/bin/env python3
 
+import sys
+sys.path.append("../lib")
 import socket, params, os, sys, re
 from framedSock import framedSend, framedReceive
-sys.path.append("../lib")  
 
 switchesVarDefaults = (
 	(('-l', '--listenPort') ,'listenPort', 50001),
